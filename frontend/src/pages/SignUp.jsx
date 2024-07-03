@@ -148,7 +148,7 @@ const SignUp = () => {
                         </div>
 
                         <div>
-                            <label>Cnnfirm Password: </label>
+                            <label>Confirm Password: </label>
                             <div className='bg-slate-200 p-2 rounded-lg flex'>
                                 <input
                                     type={showConfirmPassword ? "text" : "password"}
