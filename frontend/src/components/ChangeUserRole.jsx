@@ -62,7 +62,7 @@ const ChangeUserRole = ({
                         {
                             Object.values(ROLE).map(el => {
                                 return (
-                                    <option value={el} key={el} className='cursor-pointer'>{el}</option>
+                                    <option value={el} key={el}>{el}</option>
                                 )
                             })
                         }
