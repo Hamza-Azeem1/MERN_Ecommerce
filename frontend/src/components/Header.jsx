@@ -8,6 +8,7 @@ import SummaryApi from "../common"
 import { toast } from "react-toastify"
 import { setUserDetails } from "../store/userSlice"
 import { useState } from "react"
+import ROLE from "../common/role"
 
 const Header = () => {
 
@@ -42,9 +43,9 @@ const Header = () => {
                     </Link>
                 </div>
 
-                <div className="hidden lg:flex items-center w-full justify-between max-w-sm pl-4">
-                    <input type="text" placeholder="search product here..." className="w-full outline-none pl-2 border rounded-full focus-within:shadow" />
-                    <div className="text-lg min-w-[50px] h-8 bg-red-600 flex items-center justify-center rounded-r-full text-white cursor-pointer">
+                <div className="hidden lg:flex items-center w-full justify-between max-w-sm border rounded-full focus-within:shadow pl-2">
+                    <input type="text" placeholder="search product here..." className='w-full outline-none ml-5' />
+                    <div className='text-lg min-w-[50px] h-8 bg-red-600 flex items-center justify-center rounded-r-full text-white'>
                         <GrSearch />
                     </div>
                 </div>
@@ -52,23 +53,33 @@ const Header = () => {
                 <div className="flex items-center gap-7">
 
                     <div className="relative flex justify-center">
-                        <div className="text-3xl cursor-pointer relative flex justify-center" onClick={() => setMenuDisplay(prev => !prev)}>
-                            {
-                                user?.profilePic ? (
-                                    <img src={user?.profilePic} className="w-10 h-10 rounded-full" alt={user?.name} />
-                                ) : (
 
-                                    <FaRegCircleUser />
-                                )
-                            }
-                        </div>
+                        {
+                            user?._id && (
+                                <div className="text-3xl cursor-pointer relative flex justify-center" onClick={() => setMenuDisplay(prev => !prev)}>
+                                    {
+                                        user?.profilePic ? (
+                                            <img src={user?.profilePic} className="w-10 h-10 rounded-full" alt={user?.name} />
+                                        ) : (
+
+                                            <FaRegCircleUser />
+                                        )
+                                    }
+                                </div>
+                            )
+                        }
+
                         {
                             menuDisplay && (
                                 <div className="absolute bg-white bottom-0 top-11 h-fit p-2 shadow-md rounded">
                                     <nav>
-                                        <Link to="/admin-panel" className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2" onClick={() => setMenuDisplay(prev => !prev)}>
-                                            Admin Panel
-                                        </Link>
+                                        {
+                                            user?.role === ROLE.ADMIN && (
+                                                <Link to="/admin-panel/all-products" className="whitespace-nowrap hidden md:block hover:bg-slate-100 p-2" onClick={() => setMenuDisplay(prev => !prev)}>
+                                                    Admin Panel
+                                                </Link>
+                                            )
+                                        }
                                     </nav>
                                 </div>
                             )
@@ -98,8 +109,8 @@ const Header = () => {
                     </div>
 
                 </div>
-            </div>
-        </header>
+            </div >
+        </header >
     )
 }
 export default Header
