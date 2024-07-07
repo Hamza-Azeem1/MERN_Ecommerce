@@ -9,20 +9,21 @@ import { MdDelete } from 'react-icons/md';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify'
 
-
-const UploadProduct = ({
+const AdminEditProduct = ({
     onClose,
-    fetchData
+    productData,
+    fetchdata
 }) => {
 
     const [data, setData] = useState({
-        productName: "",
-        brandName: "",
-        category: "",
-        productImage: [],
-        description: "",
-        price: "",
-        sellingPrice: ""
+        ...productData,
+        productName: productData?.productName,
+        brandName: productData?.brandName,
+        category: productData?.category,
+        productImage: productData?.productImage || [],
+        description: productData?.description,
+        price: productData?.price,
+        sellingPrice: productData?.sellingPrice
     })
 
     const [openFullScreenImage, setOpenFullScreenImage] = useState(false)
@@ -70,8 +71,8 @@ const UploadProduct = ({
     const handleSubmit = async (e) => {
         e.preventDefault()
 
-        const response = await fetch(SummaryApi.uploadProduct.url, {
-            method: SummaryApi.uploadProduct.method,
+        const response = await fetch(SummaryApi.updateProduct.url, {
+            method: SummaryApi.updateProduct.method,
             credentials: 'include',
             headers: {
                 "content-type": "application/json"
@@ -84,7 +85,7 @@ const UploadProduct = ({
         if (responseData.success) {
             toast.success(responseData.message)
             onClose()
-            fetchData()
+            fetchdata()
         }
 
         if (responseData.error) {
@@ -98,7 +99,7 @@ const UploadProduct = ({
             <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
 
                 <div className='flex justify-between items-center pb-3'>
-                    <h2 className="font-bold text-lg">Upload Product</h2>
+                    <h2 className="font-bold text-lg">Edit Product</h2>
                     <div className='w-fit ml-auto text-2xl hover:text-red-600 cursor-pointer' onClick={onClose}>
                         <CgClose />
                     </div>
@@ -190,13 +191,13 @@ const UploadProduct = ({
 
 
 
-                    <button className='px-3 py-2 bg-red-600  text-white mb-10 hover:bg-red-700'>Upload Product</button>
+                    <button className='px-3 py-2 bg-red-600  text-white mb-10 hover:bg-red-700'>Update Product</button>
 
                 </form>
 
             </div >
 
-            {/** Display image full screen */}
+            {/** Display image full scree */}
             {
                 openFullScreenImage && (
                     <DisplayImage onClose={() => setOpenFullScreenImage(false)} imgUrl={fullScreenImage} />
@@ -208,10 +209,10 @@ const UploadProduct = ({
     )
 }
 
-
-UploadProduct.propTypes = {
+AdminEditProduct.propTypes = {
     onClose: PropTypes.func,
-    fetchData: PropTypes.func,
+    fetchdata: PropTypes.func,
+    productData: PropTypes.string,
 };
 
-export default UploadProduct
+export default AdminEditProduct
