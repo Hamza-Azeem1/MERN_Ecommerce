@@ -6,6 +6,8 @@ import productCategory from '../helpers/productCategory';
 import uploadImage from '../helpers/uploadImage';
 import DisplayImage from './DisplayImage';
 import { MdDelete } from 'react-icons/md';
+import SummaryApi from '../common';
+import { toast } from 'react-toastify'
 
 
 const UploadProduct = ({
@@ -64,6 +66,31 @@ const UploadProduct = ({
 
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
+        const response = await fetch(SummaryApi.uploadProduct.url, {
+            method: SummaryApi.uploadProduct.method,
+            credentials: 'include',
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+
+        const responseData = await response.json()
+
+        if (responseData.success) {
+            toast.success(responseData.message)
+            onClose()
+        }
+
+        if (responseData.error) {
+            toast.error(responseData.message)
+        }
+
+    }
+
     return (
         <div className="fixed bg-slate-200 bg-opacity-35 w-full h-full top-0 left-0 right-0 bottom-0 flex justify-center items-center">
             <div className="bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden">
@@ -76,15 +103,20 @@ const UploadProduct = ({
                 </div>
 
 
-                <form className='grid p-4 gap-3 overflow-y-scroll h-full pb-5'>
+                <form className='grid p-4 gap-3 overflow-y-scroll h-full pb-5' onSubmit={handleSubmit}>
                     <label htmlFor="productName">Product Name:</label>
-                    <input type="text" id='productName' placeholder='Enter Product Name' name='productName' value={data.productName} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' />
+                    <input type="text" id='productName' placeholder='Enter Product Name' name='productName' value={data.productName} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' required />
 
                     <label htmlFor="brandName" className='mt-3'>Brand Name:</label>
-                    <input type="text" id='brandName' placeholder='Enter Brand Name' name='brandName' value={data.brandName} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' />
+                    <input type="text" id='brandName' placeholder='Enter Brand Name' name='brandName' value={data.brandName} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' required />
 
                     <label htmlFor="category" className='mt-3'>Category:</label>
-                    <select value={data.category} className='p-2 bg-slate-100 border rounded'>
+                    <select value={data.category} name='category' onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' required>
+
+                        <option value={""}>
+                            Select Category
+                        </option>
+
                         {
                             productCategory.map((el, index) => {
                                 return (
@@ -136,7 +168,11 @@ const UploadProduct = ({
                     </div>
 
                     <label htmlFor="sellingPrice" className='mt-3'>Selling Price:</label>
-                    <input type="number" id='sellingPrice' placeholder='Enter Selling Price' name='sellingPrice' value={data.sellingPrice} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' />
+                    <input type="number" id='sellingPrice' placeholder='Enter Selling Price' name='sellingPrice' value={data.sellingPrice} onChange={handleOnChange} className='p-2 bg-slate-100 border rounded' required />
+
+
+                    <label htmlFor="description" className='mt-3'>Description:</label>
+                    <textarea rows={3} onChange={handleOnChange} name='description' className='h-28 bg-slate-100 border resize-none p-1' placeholder='Enter Product Description'></textarea>
 
 
 
