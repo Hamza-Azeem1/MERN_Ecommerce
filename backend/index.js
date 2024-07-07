@@ -7,19 +7,10 @@ const router = require('./routes')
 
 const app = express()
 
-const corsOptions = {
+app.use(cors({
     origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
-    credentials: true,
-    optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
-
+    credentials: true
+}))
 app.use(express.json())
 app.use(cookieParser())
 
