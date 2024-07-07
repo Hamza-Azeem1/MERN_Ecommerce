@@ -13,7 +13,7 @@ const app = express()
 // }))
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URL,
+    origin: ['https://myshop.vercel.app'],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
     credentials: true,
