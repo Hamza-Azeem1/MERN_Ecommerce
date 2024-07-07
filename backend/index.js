@@ -9,16 +9,10 @@ const app = express();
 
 const corsOptions = {
     origin: 'https://myshop.vercel.app',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
     credentials: true,
-    optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options('*', cors(corsOptions));
 
 app.use(express.json());
 app.use(cookieParser());
