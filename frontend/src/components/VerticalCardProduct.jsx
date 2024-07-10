@@ -1,18 +1,25 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import fetchCategoryWiseProducts from '../helpers/fetchCategoryWiseProducts'
-import displayINRCurrency from '../helpers/displayCurrency'
+import displayPKRcurrency from '../helpers/displayCurrency'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import addToCart from '../helpers/addToCart'
 import { Link } from 'react-router-dom'
+import Context from '../context'
 
 const VerticalCardProduct = ({ category, heading }) => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(true)
     const loadingList = new Array(13).fill(null)
 
-    const [scroll, setScroll] = useState(0)
     const scrollElement = useRef()
+
+    const { fetchUserAddToCart } = useContext(Context)
+
+    const handleAddToCart = async (e, id) => {
+        await addToCart(e, id)
+        fetchUserAddToCart()
+    }
 
     const fetchData = async () => {
         setLoading(true)
@@ -60,7 +67,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                                             <p className='text-red-600 font-medium p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2'></p>
                                             <p className='text-slate-500 line-through p-1 animate-pulse rounded-full bg-slate-200 w-full  py-2'></p>
                                         </div>
-                                        <button className='text-sm  text-white px-3  rounded-full bg-slate-200  py-2 animate-pulse' onClick={(e) => addToCart(e, product?._id)}></button>
+                                        <button className='text-sm  text-white px-3  rounded-full bg-slate-200  py-2 animate-pulse'></button>
                                     </div>
                                 </div>
                             )
@@ -76,10 +83,10 @@ const VerticalCardProduct = ({ category, heading }) => {
                                         <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
                                         <p className='capitalize text-slate-500'>{product?.category}</p>
                                         <div className='flex gap-3'>
-                                            <p className='text-red-600 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
-                                            <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
+                                            <p className='text-red-600 font-medium'>{displayPKRcurrency(product?.sellingPrice)}</p>
+                                            <p className='text-slate-500 line-through'>{displayPKRcurrency(product?.price)}</p>
                                         </div>
-                                        <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => addToCart(e, product?._id)}>Add to Cart</button>
+                                        <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>Add to Cart</button>
                                     </div>
                                 </Link>
                             )

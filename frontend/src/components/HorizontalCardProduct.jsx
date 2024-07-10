@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from "react-router-dom"
 import fetchCategoryWiseProducts from '../helpers/fetchCategoryWiseProducts'
-import displayPKRCurrency from '../helpers/displayCurrency'
+import displayPKRcurrency from '../helpers/displayCurrency'
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6'
 import addToCart from '../helpers/addToCart'
+import Context from '../context'
 
 
 const HorizontalCardProduct = ({ category, heading }) => {
@@ -15,6 +16,12 @@ const HorizontalCardProduct = ({ category, heading }) => {
     const scrollElement = useRef()
 
 
+    const { fetchUserAddToCart } = useContext(Context)
+
+    const handleAddToCart = async (e, id) => {
+        await addToCart(e, id)
+        fetchUserAddToCart()
+    }
 
     const fetchData = async () => {
         setLoading(true)
@@ -77,10 +84,10 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                     <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
                                     <p className='capitalize text-slate-500'>{product?.category}</p>
                                     <div className='flex gap-3 flex-wrap'>
-                                        <p className='text-red-600 font-medium'>{displayPKRCurrency(product?.sellingPrice)}</p>
-                                        <p className='text-slate-500 line-through'>{displayPKRCurrency(product?.price)}</p>
+                                        <p className='text-red-600 font-medium'>{displayPKRcurrency(product?.sellingPrice)}</p>
+                                        <p className='text-slate-500 line-through'>{displayPKRcurrency(product?.price)}</p>
                                     </div>
-                                    <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => addToCart(e, product?._id)} >Add to Cart</button>
+                                    <button className='text-sm bg-red-600 hover:bg-red-700 text-white px-3 py-0.5 rounded-full' onClick={(e) => handleAddToCart(e, product?._id)}>Add to Cart</button>
                                 </div>
                             </Link>
                         )
