@@ -1,10 +1,12 @@
-import { useCallback, useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
-import SummaryApi from "../common/index"
-import { FaStar, FaStarHalf } from "react-icons/fa"
-import displayPKRcurrency from '../helpers/displayCurrency'
-import CategoryWiseProductDisplay from "../components/CategoryWiseProductDisplay"
-
+import { useCallback, useContext, useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import SummaryApi from '../common'
+import { FaStar } from "react-icons/fa";
+import { FaStarHalf } from "react-icons/fa";
+import displayINRCurrency from '../helpers/displayCurrency';
+import CategroyWiseProductDisplay from '../components/CategoryWiseProductDisplay';
+import addToCart from '../helpers/addToCart';
+import Context from '../context';
 
 const ProductDetails = () => {
     const [data, setData] = useState({
@@ -27,6 +29,10 @@ const ProductDetails = () => {
     })
     const [zoomImage, setZoomImage] = useState(false)
 
+    const { fetchUserAddToCart } = useContext(Context)
+
+    const navigate = useNavigate()
+
     const fetchProductDetails = async () => {
         setLoading(true)
         const response = await fetch(SummaryApi.productDetails.url, {
@@ -45,6 +51,8 @@ const ProductDetails = () => {
         setActiveImage(dataReponse?.data?.productImage[0])
 
     }
+
+    console.log("data", data)
 
     useEffect(() => {
         fetchProductDetails()
@@ -72,6 +80,19 @@ const ProductDetails = () => {
         setZoomImage(false)
     }
 
+
+    const handleAddToCart = async (e, id) => {
+        await addToCart(e, id)
+        fetchUserAddToCart()
+    }
+
+    const handleBuyProduct = async (e, id) => {
+        await addToCart(e, id)
+        fetchUserAddToCart()
+        navigate("/cart")
+
+    }
+
     return (
         <div className='container mx-auto p-4'>
 
@@ -79,7 +100,7 @@ const ProductDetails = () => {
                 {/***product Image */}
                 <div className='h-96 flex flex-col lg:flex-row-reverse gap-4'>
 
-                    <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2 lg:cursor-zoom-in'>
+                    <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2'>
                         <img src={activeImage} className='h-full w-full object-scale-down mix-blend-multiply' onMouseMove={handleZoomImage} onMouseLeave={handleLeaveImageZoom} />
 
                         {/**product zoom */}
@@ -177,13 +198,13 @@ const ProductDetails = () => {
                                 </div>
 
                                 <div className='flex items-center gap-2 text-2xl lg:text-3xl font-medium my-1'>
-                                    <p className='text-red-600'>{displayPKRcurrency(data.sellingPrice)}</p>
-                                    <p className='text-slate-400 line-through'>{displayPKRcurrency(data.price)}</p>
+                                    <p className='text-red-600'>{displayINRCurrency(data.sellingPrice)}</p>
+                                    <p className='text-slate-400 line-through'>{displayINRCurrency(data.price)}</p>
                                 </div>
 
                                 <div className='flex items-center gap-3 my-2'>
-                                    <button className='border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white' >Buy</button>
-                                    <button className='border-2 border-red-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white' >Add To Cart</button>
+                                    <button className='border-2 border-red-600 rounded px-3 py-1 min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white' onClick={(e) => handleBuyProduct(e, data?._id)}>Buy</button>
+                                    <button className='border-2 border-red-600 rounded px-3 py-1 min-w-[120px] font-medium text-white bg-red-600 hover:text-red-600 hover:bg-white' onClick={(e) => handleAddToCart(e, data?._id)}>Add To Cart</button>
                                 </div>
 
                                 <div>
@@ -193,15 +214,22 @@ const ProductDetails = () => {
                             </div>
                         )
                 }
+
             </div>
+
+
 
             {
                 data.category && (
-                    <CategoryWiseProductDisplay category={"camera"} heading={"Recomended Product"} />
+                    <CategroyWiseProductDisplay category={data?.category} heading={"Recommended Product"} />
                 )
             }
+
+
+
 
         </div>
     )
 }
+
 export default ProductDetails
