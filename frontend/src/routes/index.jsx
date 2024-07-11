@@ -11,6 +11,7 @@ import CategoryProduct from '../pages/CategoryProduct';
 import ProductDetails from '../pages/ProductDetails';
 import Cart from '../pages/Cart';
 import SearchProduct from '../pages/SearchProduct';
+import PageNotFound from '../pages/PageNotFound';
 
 const router = createBrowserRouter([
     {
@@ -64,6 +65,10 @@ const router = createBrowserRouter([
                 ]
             }
         ]
+    },
+    {
+        path: '*',
+        element: <PageNotFound />
     }
 ])
 
