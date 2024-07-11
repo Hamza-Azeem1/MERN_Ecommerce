@@ -1,7 +1,8 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaRegCircleUser, FaShoppingCart } from 'react-icons/fa';
+import { FaShoppingCart } from 'react-icons/fa';
+import { FaRegCircleUser } from "react-icons/fa6";
 import { GrSearch } from 'react-icons/gr';
 import { toast } from 'react-toastify';
 import { setUserDetails } from '../store/userSlice';
@@ -17,8 +18,12 @@ const Header = () => {
     const context = useContext(Context);
     const navigate = useNavigate();
     const searchInput = useLocation();
-    const URLSearch = new URLSearchParams(searchInput.search);
-    const searchQuery = URLSearch.getAll("q");
+
+    const searchQuery = useMemo(() => {
+        const URLSearch = new URLSearchParams(searchInput.search);
+        return URLSearch.get("q") || '';
+    }, [searchInput]);
+
     const [search, setSearch] = useState(searchQuery);
 
     useEffect(() => {
