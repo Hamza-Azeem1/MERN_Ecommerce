@@ -1,15 +1,15 @@
-import { useContext, useState } from 'react'
 import Logo from '../assets/logo.png'
-import { GrSearch } from "react-icons/gr";
-import { FaRegCircleUser } from "react-icons/fa6";
-import { FaShoppingCart } from "react-icons/fa";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import SummaryApi from '../common';
-import { toast } from 'react-toastify'
-import { setUserDetails } from '../store/userSlice';
-import ROLE from '../common/role';
-import Context from '../context';
+import { GrSearch } from "react-icons/gr"
+import { FaRegCircleUser } from "react-icons/fa6"
+import { FaShoppingCart } from "react-icons/fa"
+import { Link, useLocation, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import SummaryApi from "../common"
+import { toast } from "react-toastify"
+import { setUserDetails } from "../store/userSlice"
+import { useContext, useState } from "react"
+import ROLE from "../common/role"
+import Context from '../context'
 
 const Header = () => {
     const user = useSelector(state => state?.user?.user)
@@ -55,7 +55,7 @@ const Header = () => {
     return (
         <header className='h-16 shadow-md bg-white fixed w-full z-40'>
             <div className=' h-full container mx-auto flex items-center px-4 justify-between'>
-                <div className=''>
+                <div>
                     <Link to='/'>
                         <img src={Logo} alt="logo" style={{ width: '130px', height: '110px' }} />
                     </Link>
