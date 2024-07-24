@@ -1,5 +1,6 @@
 const stripe = require('../../config/stripe')
 const orderModel = require('../../models/orderProductModel')
+const addToCartModel = require('../../models/cartProduct')
 
 endpointSecret = process.env.VITE_STRIPE_ENDPOINT
 
@@ -20,8 +21,6 @@ async function getLineItems(lineItems) {
             }
 
             ProductItems.push(productData)
-
-
         }
     }
 
@@ -78,6 +77,10 @@ const webhooks = async (request, response) => {
 
             const order = new orderModel(orderDetails)
             const saveOrder = await order.save()
+
+            if (saveOrder?._id) {
+                const deleteCartItems = await addToCartModel.deleteMany({ userId: session.metadata.userId })
+            }
 
             break;
 
